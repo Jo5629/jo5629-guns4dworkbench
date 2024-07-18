@@ -80,9 +80,10 @@ guns4dworkbench.is_eligible_for_craft("guns4d_pack_1:45A", player:get_inventory(
       - `True` -> Success.
       - `False` -> Failure.
     - Number:
-      - `1` -> Insufficient items.
-      - `2` -> No inventory space.
-      - `3` -> Successful.
+      - `1` -> Insufficient items or ineligible craft.
+      - `2` -> No inventory space available.
+      - `3` -> Successfully handled.
+      - `4` -> Was overridden by something else.
     - Itemstack:
       - Returns `nil` or `ItemStack` depending on whether `override` is true and if there is space in the inventory.
   - This function is used for autonomy. For players, use `guns4dworkbench.player_craft_item()`

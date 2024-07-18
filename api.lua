@@ -52,13 +52,15 @@ end
 
 guns4dworkbench.crafting_reasons = {
     [1] = "Insufficient items or ineligible craft.",
-    [2] = "No inventory space.",
-    [3] = "Successful."
+    [2] = "No inventory space available.",
+    [3] = "Successfully handled.",
+    [4] = "Was overridden by something else.",
 }
 
 --> Function for any automation. (Hopefully)
 function guns4dworkbench.craft_item(output, inv, listname, override)
     override = override or false
+    local boolean, number, itemstack = false, 1, nil
 
     local eligible = guns4dworkbench.is_eligible_for_craft(output, inv, listname)
     if eligible then
@@ -66,29 +68,32 @@ function guns4dworkbench.craft_item(output, inv, listname, override)
 
         local output_stack = ItemStack(craft_table.output)
         if not inv:room_for_item(listname, output_stack) and not override then
-            return false, 2
+            number = 2
+            return boolean, number, itemstack
         end
 
         for _, input in pairs(craft_table.recipe) do
             inv:remove_item(listname, ItemStack(input))
         end
 
-        return true, 3, inv:add_item(listname, output_stack)
+        number = 3
+        if override then
+            number = 4
+        end
+
+        boolean, itemstack = true, inv:add_item(listname, output_stack)
     end
-    return false, 1
+    return boolean, number, itemstack
 end
 
 function guns4dworkbench.player_craft_item(output, player, listname)
     listname = listname or "main"
     local inv = player:get_inventory()
 
-    local success, callback, itemstack = guns4dworkbench.craft_item(output, inv, listname, true)
-    if not success and callback == 2 then
-        if itemstack then
-            minetest.add_item(player:get_pos(), itemstack)
-        end
-
-        return true, 3
+    local success, number, itemstack = guns4dworkbench.craft_item(output, inv, listname, true)
+    if number == 4 and itemstack ~= nil then
+        minetest.add_item(player:get_pos(), itemstack)
+        number = 3
     end
-    return success, callback
+    return success, number, itemstack
 end
