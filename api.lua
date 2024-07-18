@@ -51,28 +51,29 @@ function guns4dworkbench.is_eligible_for_craft(output, inv, listname)
 end
 
 guns4dworkbench.crafting_reasons = {
-    [1] = "Insufficient items.",
+    [1] = "Insufficient items or ineligible craft.",
     [2] = "No inventory space.",
     [3] = "Successful."
 }
 
-
 --> Function for any automation. (Hopefully)
-function guns4dworkbench.craft_item(output, inv, listname)
+function guns4dworkbench.craft_item(output, inv, listname, override)
+    override = override or false
+
     local eligible = guns4dworkbench.is_eligible_for_craft(output, inv, listname)
     if eligible then
         local craft_table = guns4dworkbench.get_craft_for(output)
 
         local output_stack = ItemStack(craft_table.output)
-        if not inv:room_for_item(listname, output_stack) then
+        if not inv:room_for_item(listname, output_stack) and not override then
             return false, 2
         end
 
         for _, input in pairs(craft_table.recipe) do
             inv:remove_item(listname, ItemStack(input))
         end
-        inv:add_item(listname, output_stack)
-        return true, 3
+
+        return true, 3, inv:add_item(listname, output_stack)
     end
     return false, 1
 end
@@ -81,10 +82,12 @@ function guns4dworkbench.player_craft_item(output, player, listname)
     listname = listname or "main"
     local inv = player:get_inventory()
 
-    local success, callback = guns4dworkbench.craft_item(output, inv, listname)
+    local success, callback, itemstack = guns4dworkbench.craft_item(output, inv, listname, true)
     if not success and callback == 2 then
-        local craft_table = guns4dworkbench.get_craft_for(output)
-        minetest.add_item(player:get_pos(), ItemStack(craft_table.output))
+        if itemstack then
+            minetest.add_item(player:get_pos(), itemstack)
+        end
+
         return true, 3
     end
     return success, callback

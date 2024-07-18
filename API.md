@@ -70,19 +70,23 @@ Example:
 guns4dworkbench.is_eligible_for_craft("guns4d_pack_1:45A", player:get_inventory())
 ```
 
-- `guns4dworkbench.craft_item(output, inv, listname)`
+- `guns4dworkbench.craft_item(output, inv, listname, override)`
   - Crafts the item stated in `output`.
   - `inv` is an `InvRef`.
   - `listname` is a type of list in `InvRef`.
-  - Returns a boolean and a number.
+  - `override` is a boolean.
+  - Returns `boolean, number, ItemStack`.
     - Boolean:
       - `True` -> Success.
       - `False` -> Failure.
     - Number:
-    - `1` -> Insufficient items.
-    - `2` -> No inventory space.
-    - `3` -> Successful.
+      - `1` -> Insufficient items.
+      - `2` -> No inventory space.
+      - `3` -> Successful.
+    - Itemstack:
+      - Returns `nil` or `ItemStack` depending on whether `override` is true and if there is space in the inventory.
   - This function is used for autonomy. For players, use `guns4dworkbench.player_craft_item()`
 - `guns4dworkbench.player_craft_item(output, player, listname)`
   - Mirror function to `guns4dworkbench.craft_item()` above.
+  - The main difference is that if there is no more space in the player's inventory, the output will drop onto the player's position.
   - `listname` will default to `"main"` unless otherwise stated.
