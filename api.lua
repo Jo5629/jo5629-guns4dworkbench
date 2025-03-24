@@ -92,7 +92,7 @@ function guns4dworkbench.player_craft_item(output, player, listname)
 
     local success, number, itemstack = guns4dworkbench.craft_item(output, inv, listname, true)
     if number == 4 and itemstack ~= nil then
-        minetest.add_item(player:get_pos(), itemstack)
+        core.add_item(player:get_pos(), itemstack)
         number = 3
     end
     return success, number, itemstack

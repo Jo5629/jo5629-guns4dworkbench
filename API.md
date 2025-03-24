@@ -14,7 +14,7 @@ There are three registration functions for each of the three components stated a
 - `guns4dworkbench.register_magcraft(name, def)`
 - `guns4dworkbench.register_guncraft(name, def)`
 
-The registration works like the `shapeless` type in `minetest.register_craft`. See [Minetest Modding Book](https://rubenwardy.com/minetest_modding_book/en/items/nodes_items_crafting.html#crafting) for a clearer explanation on this.
+The registration works like the `shapeless` type in `core.register_craft`. See [Minetest Modding Book](https://rubenwardy.com/minetest_modding_book/en/items/nodes_items_crafting.html#crafting) for a clearer explanation on this.
 
 If no output is stated, the name registered will be used as the output.
 

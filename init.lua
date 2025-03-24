@@ -5,16 +5,16 @@ guns4dworkbench = {
     registered_crafts = {},
 }
 
-local modpath = minetest.get_modpath(minetest.get_current_modname())
+local modpath = core.get_modpath(core.get_current_modname())
 
 dofile(modpath .. "/api.lua")
 dofile(modpath .. "/workbench.lua")
 
-if minetest.get_modpath("default") then
+if core.get_modpath("default") then
     local steel = "default:steel_ingot"
     local wood = "group:wood"
     local stick = "default:stick"
-    minetest.register_craft({
+    core.register_craft({
         type = "shaped",
         output = "guns4dworkbench:Workbench",
         recipe = {
@@ -23,7 +23,7 @@ if minetest.get_modpath("default") then
             {stick, "", stick},
         }
     })
-    if minetest.get_modpath("guns4d_pack_1") and minetest.get_modpath("tnt") then
+    if core.get_modpath("guns4d_pack_1") and core.get_modpath("tnt") then
         dofile(modpath .. "/guns4d_pack_1.lua")
     end
 end
